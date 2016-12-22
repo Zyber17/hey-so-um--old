@@ -106,14 +106,21 @@ function displaySuggestions(suggestionList: SuggestionList) {
 				};
 			}
 		})(suggestion);
-		let li = liConstructor(suggestion.text, 'you', cont);
+		let li = liConstructor(suggestion.text, null, cont);
 		currentSuggestions.append(li);
 	});
 }
 
 function liConstructor(text: string, cssClass: string | null, listener: Listener | null) {
 	let li = document.createElement('li');
-	li.innerHTML = text;
+
+	let span = document.createElement('span');
+	span.innerHTML = text;
+	span.classList.add('message');
+
+	li.appendChild(span);
+	li.classList.add('new');
+
 	if (cssClass != null) {
 		li.classList.add(cssClass);
 	}
