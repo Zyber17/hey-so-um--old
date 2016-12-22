@@ -1,8 +1,8 @@
-interface MessageItem {
-	text: string;
-	style: StyleFunction | null;
-}
-type MessageList    = MessageItem[];
+// interface MessageItem {
+// 	text: string;
+// 	//style: StyleFunction | null;
+// }
+type MessageList    = string[];
 
 interface SuggestionItem {
 	text: string;
@@ -30,31 +30,43 @@ interface Continuation {
 
 const messageFlow: MessageAndSuggestionList = [
 	{
-		messages: [{
-			text: "Hi!",
-			style: null
-		}],
+		messages: [
+			"Hey",
+			"So, um, I need to talk to you about a thing."
+		],
 		suggestions: [
 			{
-				text: "hi there!",
+				text: "Okay&hellip;",
 				next: {
 					messages: [
-						{
-							text: 'hi again!!!!',
-							style: null
-						}, {
-							text: 'how\'s it going',
-							style: null
- 						}
+						"So, turns out, I'm genderqueer."
 					],
 					suggestions: [
 						{
-							text: 'hey hey hey',
-							next: null
-						},
-						{
-							text: 'what is up',
-							next: null
+							text: "Huh? What's that?",
+							next: {
+								messages: ["A thing"],
+								suggestions: null
+							}
+						}, {
+							text: "Okay! What name and pronouns should I use for you?",
+							next: {
+								messages: [
+									"Z and They/them"
+								],
+								suggestions: null
+							}
+						}, {
+							text: "Ugh, same",
+							next: {
+								messages: [
+									"Hi! I'm Z! (they/them)",
+									"I hope you like this little thing I made to help make coming out easier. I got the initial idea from the lovely [Lo Knutilla](https://github.com/lknutilla/hey-so-um).",
+									"I'f you think something like this would help you come out too, feel free to take inspiration or even [fork this site on GitHub](https://github.com/Zyber17/hey-so-um).",
+									"If you'd like to say hi, I'm [@Z_Healy](twitter.com/Z_Healy) on Twitter and one of my many emails is [z@corbett.im](mailto:z@corbett.im)"
+								],
+								suggestions: null
+							}
 						}
 					]
 				}
@@ -76,8 +88,8 @@ function chatInit(): void {
 }
 
 function displayMessages(messageList: MessageList, continuation: Continuation | null) {
-	if (messageList.length > 0) {
-		messageLog.appendChild(liConstructor(messageList[0].text, ['me', 'new'], null));
+	if (messageList && messageList.length > 0) {
+		messageLog.appendChild(liConstructor(messageList[0], ['me', 'new'], null));
 		messageList.shift(); // remove first item from message list
 		setTimeout(() => {
 			displayMessages(messageList, continuation);
@@ -95,28 +107,30 @@ function displayResponse(response: string) {
 function displaySuggestions(suggestionList: SuggestionList) {
 	removeChildren(currentSuggestions);
 
-	suggestionList.forEach((suggestion) => {
-		const cont = ((suggestion) => {
-			if (suggestion.next) {
-				return (e) => {
-					displayResponse(suggestion.text);
-					removeChildren(currentSuggestions);
-					setTimeout(() => {
-						displayMessages(suggestion.next.messages, () => {
-							displaySuggestions(suggestion.next.suggestions);
-						});
-					}, delay);
-				};
-			} else {
-				return (e) => {
-					displayResponse(suggestion.text);
-					removeChildren(currentSuggestions);
-				};
-			}
-		})(suggestion);
-		let li = liConstructor(suggestion.text, ['new'], cont);
-		currentSuggestions.appendChild(li);
-	});
+	if(suggestionList && suggestionList.length > 0) {
+		suggestionList.forEach((suggestion) => {
+			const cont = ((suggestion) => {
+				if (suggestion.next) {
+					return (e) => {
+						displayResponse(suggestion.text);
+						removeChildren(currentSuggestions);
+						setTimeout(() => {
+							displayMessages(suggestion.next.messages, () => {
+								displaySuggestions(suggestion.next.suggestions);
+							});
+						}, delay);
+					};
+				} else {
+					return (e) => {
+						displayResponse(suggestion.text);
+						removeChildren(currentSuggestions);
+					};
+				}
+			})(suggestion);
+			let li = liConstructor(suggestion.text, ['new'], cont);
+			currentSuggestions.appendChild(li);
+		});
+	}
 }
 
 function liConstructor(text: string, classes: string[] | null, listener: Listener | null): HTMLElement {
