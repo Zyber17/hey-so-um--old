@@ -63,6 +63,7 @@ const messageFlow: MessageAndSuggestionList = [
 	}
 ];
 
+const delay = 600;
 var messageLog: HTMLElement;
 var currentSuggestions: HTMLElement;
 
@@ -75,10 +76,14 @@ function chatInit(): void {
 }
 
 function displayMessages(messageList: MessageList, continuation: Continuation | null) {
-	messageList.forEach((message) => {
-		messageLog.appendChild(liConstructor(message.text, ['me', 'new'], null));
-	});
-	if (continuation) {
+	if (messageList.length > 0) {
+		messageLog.appendChild(liConstructor(messageList[0].text, ['me', 'new'], null));
+		messageList.shift(); // remove first item from message list
+		setTimeout(() => {
+			displayMessages(messageList, continuation);
+		}, delay);
+	}
+	else if (continuation) {
 		continuation();
 	}
 }
@@ -95,9 +100,12 @@ function displaySuggestions(suggestionList: SuggestionList) {
 			if (suggestion.next) {
 				return (e) => {
 					displayResponse(suggestion.text);
-					displayMessages(suggestion.next.messages, () => {
-						displaySuggestions(suggestion.next.suggestions);
-					});
+					removeChildren(currentSuggestions);
+					setTimeout(() => {
+						displayMessages(suggestion.next.messages, () => {
+							displaySuggestions(suggestion.next.suggestions);
+						});
+					}, delay);
 				};
 			} else {
 				return (e) => {
@@ -106,7 +114,7 @@ function displaySuggestions(suggestionList: SuggestionList) {
 				};
 			}
 		})(suggestion);
-		let li = liConstructor(suggestion.text, null, cont);
+		let li = liConstructor(suggestion.text, ['new'], cont);
 		currentSuggestions.appendChild(li);
 	});
 }
