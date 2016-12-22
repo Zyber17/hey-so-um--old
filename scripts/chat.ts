@@ -63,12 +63,12 @@ const messageFlow: MessageAndSuggestionList = [
 	}
 ];
 
-var messageLog;
-var currentSuggestions;
+var messageLog: HTMLElement;
+var currentSuggestions: HTMLElement;
 
 function chatInit(): void {
-	messageLog = $('#messageLog');
-	currentSuggestions = $('#currentSuggestions');
+	messageLog = document.getElementById('messageLog');
+	currentSuggestions = document.getElementById('currentSuggestions');
 	displayMessages(messageFlow[0].messages, () => {
 		displaySuggestions(messageFlow[0].suggestions);
 	});
@@ -76,7 +76,7 @@ function chatInit(): void {
 
 function displayMessages(messageList: MessageList, continuation: Continuation | null) {
 	messageList.forEach((message) => {
-		messageLog.append(liConstructor(message.text, 'me', null));
+		messageLog.appendChild(liConstructor(message.text, ['me', 'new'], null));
 	});
 	if (continuation) {
 		continuation();
@@ -84,11 +84,11 @@ function displayMessages(messageList: MessageList, continuation: Continuation | 
 }
 
 function displayResponse(response: string) {
-	messageLog.append(liConstructor(response, 'you', null));
+	messageLog.appendChild(liConstructor(response, ['you', 'new'], null));
 }
 
 function displaySuggestions(suggestionList: SuggestionList) {
-	currentSuggestions.children().remove(); // remove children
+	removeChildren(currentSuggestions);
 
 	suggestionList.forEach((suggestion) => {
 		const cont = ((suggestion) => {
@@ -102,31 +102,37 @@ function displaySuggestions(suggestionList: SuggestionList) {
 			} else {
 				return (e) => {
 					displayResponse(suggestion.text);
-					currentSuggestions.children().remove();
+					removeChildren(currentSuggestions);
 				};
 			}
 		})(suggestion);
 		let li = liConstructor(suggestion.text, null, cont);
-		currentSuggestions.append(li);
+		currentSuggestions.appendChild(li);
 	});
 }
 
-function liConstructor(text: string, cssClass: string | null, listener: Listener | null) {
+function liConstructor(text: string, classes: string[] | null, listener: Listener | null): HTMLElement {
 	let li = document.createElement('li');
 
-	let span = document.createElement('span');
-	span.innerHTML = text;
-	span.classList.add('message');
+	let div = document.createElement('div');
 
-	li.appendChild(span);
-	li.classList.add('new');
+	let p = document.createElement('p');
+	p.innerHTML = text;
+	p.classList.add('message');
 
-	if (cssClass != null) {
-		li.classList.add(cssClass);
+	li.appendChild(p);
+
+	if (classes && classes.length > 0) {
+		classes.forEach((c) => {li.classList.add(c);});
 	}
 	if (typeof listener === "function" && listener != null) {
-		console.log(listener);
 		li.addEventListener('click', listener);
 	}
 	return li;
+}
+
+function removeChildren(elem: HTMLElement): void {
+	while (elem.children.length > 0) {
+		elem.children[0].remove();
+	}
 }
