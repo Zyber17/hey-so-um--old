@@ -1,6 +1,8 @@
 @require 'helpers/vars'
 @require 'helpers/fixes'
 
+body
+	font font
 
 #wrapper #dialogueWindow
 	width 400px
@@ -10,9 +12,33 @@
 		&#messages
 			height: 200px;
 			padding-bottom 40px
+			ul
+				display: block;
+				li
+					list-style: none;
+					display: block;
+					clear: both;
+					span
+						display: inline-block;
+						max-width: (100*2/3)%;
+						padding pad;
+						borderRadius(pad)
+						margin-bottom: pad
+					&.you
+						span
+							background: youBg
+							color: youText
+							float: right;
+					&.me
+						span
+							background: meBg
+							color: meText
+							float: left;
 		&#suggestions
 			height: 100px;
 			ul
 				li
-					background: grey
-					color: textAlt
+					background: sugBg
+					color: sugText
+					text-align: center;
+					padding: pad
