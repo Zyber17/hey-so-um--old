@@ -171,7 +171,7 @@ const messageFlow: MessageAndSuggestionList = [
 							next: {
 								messages: [
 									{
-										text: "I'm sure you&rsquo;d get a different answer from every genderqueer person you asked, but to me it&rsquo;s simply that I <em>really</em> dislike being confined to the typical roles/conceptions/ideals of one gender or another (especially masculinity), to the point that it presents <a href='https://en.wikipedia.org/wiki/gender_dysphoria'>real mental health issues (DOUBLE CHECK THIS LINK)</a>, for me when I don't take steps (like this) to remedy them.",
+										text: "I'm sure you&rsquo;d get a different answer from every genderqueer person you asked, but to me it&rsquo;s simply that I <em>really</em> dislike being confined to the typical roles/conceptions/ideals of one gender or another (especially masculinity), to the point that it presents <a href='https://en.wikipedia.org/wiki/Gender_dysphoria'>real mental health issues</a>, for me when I don't take steps (like this) to remedy them.",
 										timing: null
 									}, {
 										text: "That&rsquo;s why I go by a different name and different pronouns these days.",
