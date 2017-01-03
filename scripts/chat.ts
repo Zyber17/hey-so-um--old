@@ -82,14 +82,14 @@ const french: MessageAndSuggestionItem = {
 	],
 	suggestions: [
 		{
-			text: "Oui !",
+			text: "Oui&nbsp;!",
 			next: {
 				messages: [
 					{
 						text: "Je l&rsquo;aimerais si vous pouvez utilizer du grammaire f&eacute;minin quand vous parlez de moi.",
 						timing: null
 					}, {
-						text: "Par exemple, dire &laquo; Z est informaticienne &raquo; et &laquo; Est-vous pr&ecirc;te ? &raquo;, pas &laquo; Z est informaticien &raquo; ou &laquo; Est-vous pr&ecirc;t ? &raquo;.",
+						text: "Par exemple, dire &laquo;&nbsp;Z est informaticienne&nbsp;&raquo; et &laquo;&nbsp;Est-vous pr&ecirc;te&nbsp;?&nbsp;&raquo;, pas &laquo;&nbsp;Z est informaticien&nbsp;&raquo; ou &laquo; Est-vous pr&ecirc;t&nbsp;?&nbsp;&raquo;.",
 						timing: null
 					}
 				],
@@ -97,7 +97,7 @@ const french: MessageAndSuggestionItem = {
 					text: "D&rsquo;accord, bien s&ucirc;r.",
 					next: (() => {
 						spanish.messages.unshift({
-							text: "Merci beaucoup !",
+							text: "Merci beaucoup&nbsp;!",
 							timing: null
 						});
 						return spanish;
