@@ -28,6 +28,20 @@ interface Continuation {
 	(): any;
 }
 
+const nameMessage: MessageItem = ((hash) => {
+	if (hash.toLowerCase() == 'z') {
+		return {
+			text: "It's Z",
+			timing: null
+		};
+	} else {
+		return {
+			text: "It's <span id='z'>Z</span><span id='ack'>ack</span><span id='ary'>ary</span>",
+			timing: 8500
+		};
+	}
+})(window.location.hash.substr(1));
+
 const nameAndPronouns: MessageAndSuggestionItem = {
 	messages: [
 		{
@@ -47,10 +61,8 @@ const messageFlow: MessageAndSuggestionList = [
 			{
 				text: "Hey",
 				timing: null
-			}, {
-				text: "It's <span id='z'>Z</span><span id='ack'>ack</span><span id='ary'>ary</span>",
-				timing: 8500
-			}, {
+			},
+			nameMessage, {
 				text: "So, um, I need to talk to you about a thing.",
 				timing: null
 			}
