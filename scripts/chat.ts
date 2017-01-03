@@ -28,6 +28,19 @@ interface Continuation {
 	(): any;
 }
 
+const nameAndPronouns: MessageAndSuggestionItem = {
+	messages: [
+		{
+			text: "Well, these days I go by the name &lsquo;Z&rsquo; (pronounced the American way: <em>Zee</em> &mdash; not the Canaidan/British way: <em>Zed</em>). My pronouns are <a href='https://pronoun.is/they/.../themself'>they/them/themself</a>. Here are some example usages:",
+			timing: null
+		}, {
+			text: "Z themself went to the store today to buy their favoite tea.<br/><br/>They like to go running in cool (but not cold) weather.<br/><br/>Z? Oh yeah, I like them a lot.",
+			timing: 6000
+		}
+	],
+	suggestions: null
+};
+
 const messageFlow: MessageAndSuggestionList = [
 	{
 		messages: [
@@ -48,7 +61,7 @@ const messageFlow: MessageAndSuggestionList = [
 				next: {
 					messages: [
 						{
-							text: "So, turns out, I'm genderqueer.",
+							text: "Uh, well, turns out, I'm genderqueer.",
 							timing: null
 						}
 					],
@@ -58,23 +71,23 @@ const messageFlow: MessageAndSuggestionList = [
 							next: {
 								messages: [
 									{
-										text: "A thing",
+										text: "I'm sure you&rsquo;d get a different answer from every genderqueer person you asked, but to me it&rsquo;s simply that I <em>really</em> dislike being confined to the typical roles/conceptions/ideals of one gender or another (especially masculinity), to the point that it presents <a href='https://en.wikipedia.org/wiki/gender_dysphoria'>real mental health issues (DOUBLE CHECK THIS LINK)</a>, for me when I don't take steps (like this) to remedy them.",
+										timing: null
+									}, {
+										text: "That&rsquo;s why I go by a different name and different pronouns these days.",
 										timing: null
 									}
 								],
-								suggestions: null
+								suggestions: [
+									{
+										text: "Okay! What name and pronouns should I use for you?",
+										next: nameAndPronouns
+									}
+								]
 							}
 						}, {
 							text: "Okay! What name and pronouns should I use for you?",
-							next: {
-								messages: [
-									{
-										text: "Z and They/them",
-										timing: null
-									}
-								],
-								suggestions: null
-							}
+							next: nameAndPronouns
 						}, {
 							text: "Ugh, same",
 							next: {
