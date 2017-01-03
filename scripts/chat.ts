@@ -1,8 +1,8 @@
-// interface MessageItem {
-// 	text: string;
-// 	//style: StyleFunction | null;
-// }
-type MessageList    = string[];
+interface MessageItem {
+	text: string;
+	timing: number | null;
+}
+type MessageList    = MessageItem[];
 
 interface SuggestionItem {
 	text: string;
@@ -31,28 +31,47 @@ interface Continuation {
 const messageFlow: MessageAndSuggestionList = [
 	{
 		messages: [
-			"Hey",
-			"So, um, I need to talk to you about a thing."
+			{
+				text: "Hey",
+				timing: null
+			}, {
+				text: "It's <span id='z'>Z</span><span id='ack'>ack</span><span id='ary'>ary</span>",
+				timing: 8500
+			}, {
+				text: "So, um, I need to talk to you about a thing.",
+				timing: null
+			}
 		],
 		suggestions: [
 			{
 				text: "Okay&hellip;",
 				next: {
 					messages: [
-						"So, turns out, I'm genderqueer."
+						{
+							text: "So, turns out, I'm genderqueer.",
+							timing: null
+						}
 					],
 					suggestions: [
 						{
 							text: "Huh? What's that?",
 							next: {
-								messages: ["A thing"],
+								messages: [
+									{
+										text: "A thing",
+										timing: null
+									}
+								],
 								suggestions: null
 							}
 						}, {
 							text: "Okay! What name and pronouns should I use for you?",
 							next: {
 								messages: [
-									"Z and They/them"
+									{
+										text: "Z and They/them",
+										timing: null
+									}
 								],
 								suggestions: null
 							}
@@ -60,10 +79,19 @@ const messageFlow: MessageAndSuggestionList = [
 							text: "Ugh, same",
 							next: {
 								messages: [
-									"Hi! I'm Z! (they/them)",
-									"I hope you like this little thing I made to help make coming out easier. I got the initial idea from the lovely [Lo Knutilla](https://github.com/lknutilla/hey-so-um).",
-									"I'f you think something like this would help you come out too, feel free to take inspiration or even [fork this site on GitHub](https://github.com/Zyber17/hey-so-um).",
-									"If you'd like to say hi, I'm [@Z_Healy](twitter.com/Z_Healy) on Twitter and one of my many emails is [z@corbett.im](mailto:z@corbett.im)"
+									{
+										text: "Hi! I'm Z! (they/them)",
+										timing: null
+									}, {
+										text: "I hope you like this little thing I made to help make coming out easier. I got the initial idea from the lovely <a href='https://github.com/lknutilla/hey-so-um'>Lo Knutilla</a>.",
+										timing: null
+									}, {
+										text: "I'f you think something like this would help you come out too, feel free to take inspiration or even <a href='https://github.com/Zyber17/hey-so-um'>fork this site on GitHub</a>.",
+										timing: null
+									}, {
+										text: "If you'd like to say hi, I'm <a href='https://twitter.com/Z_Healy'>@Z_Healy</a> on Twitter and one of my many emails is <a href='mailto:z@zcorbett.com'>z@zcorbett.com</a>.",
+										timing: null
+									}
 								],
 								suggestions: null
 							}
@@ -75,7 +103,7 @@ const messageFlow: MessageAndSuggestionList = [
 	}
 ];
 
-const delay = 600;
+const delay = 800;
 var messageLog: HTMLElement;
 var currentSuggestions: HTMLElement;
 
@@ -89,11 +117,12 @@ function chatInit(): void {
 
 function displayMessages(messageList: MessageList, continuation: Continuation | null) {
 	if (messageList && messageList.length > 0) {
-		messageLog.appendChild(liConstructor(messageList[0], ['me', 'new'], null));
+		messageLog.appendChild(liConstructor(messageList[0].text, ['me', 'new'], null));
+		const timing: number = messageList[0].timing ? messageList[0].timing : delay;
 		messageList.shift(); // remove first item from message list
 		setTimeout(() => {
 			displayMessages(messageList, continuation);
-		}, delay);
+		}, timing);
 	}
 	else if (continuation) {
 		continuation();

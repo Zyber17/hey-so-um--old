@@ -93,3 +93,52 @@ body
     opacity 1
   }
 }
+
+#ary{
+	display: inline-block;
+  -webkit-animation: ary ease 4.5s;
+  -webkit-animation-iteration-count: 1;
+  opacity: 0
+  font-size: 0px;
+}
+
+@-webkit-keyframes ary {
+  0% {
+    opacity: 1
+	font-size: 16px
+  }
+  33% {
+	  opacity: 1
+  }
+  66% {
+	opacity: 0
+	font-size: 16px
+  }
+  100% {
+	font-size: 0px
+  }
+}
+
+#ack {
+  -webkit-animation: ack ease 7.5s;
+  -webkit-animation-iteration-count: 1;
+  opacity: 0
+  font-size: 0px;
+}
+
+@-webkit-keyframes ack {
+  0% {
+    opacity: 1
+	font-size: 16px
+  }
+  60% {
+	  opacity: 1
+  }
+  80% {
+	opacity: 0
+	font-size: 16px
+  }
+  100% {
+    font-size: 0px;
+  }
+}
