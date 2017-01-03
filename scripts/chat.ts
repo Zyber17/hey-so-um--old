@@ -42,18 +42,106 @@ const nameMessage: MessageItem = ((hash) => {
 	}
 })(window.location.hash.substr(1));
 
+let spanish: MessageAndSuggestionItem = {
+	messages: [{
+		text: "&iquest;Habla usted espa&ntilde;ol?",
+		timing: null
+	}],
+	suggestions: [
+		{
+			text: "&iexcl;S&iacute;!",
+			next: null
+		}, {
+			text: "No",
+			next: null
+		}, {
+			text: "Huh?",
+			next: {
+				messages: [{
+					text: "Oh, I was just asking if you speak Spanish. If you don&rsquo;t, don&rsquo;t worry about it.",
+					timing: null
+				}],
+				suggestions: [{
+					text: "Ah, okay.",
+					next: null
+				}]
+			}
+		}
+	]
+};
+
+const french: MessageAndSuggestionItem = {
+	messages: [
+		{
+			text: "Great! Thanks so much!",
+			timing: null
+		}, {
+			text: "Parlez-vous fran&ccedil;ais ?",
+			timing: null
+		}
+	],
+	suggestions: [
+		{
+			text: "Oui !",
+			next: {
+				messages: [
+					{
+						text: "Je l&rsquo;aimerais si vous pouvez utilizer du grammaire f&eacute;minin quand vous parlez de moi.",
+						timing: null
+					}, {
+						text: "Par exemple, dire &laquo; Z est informaticienne &raquo; et &laquo; Est-vous pr&ecirc;te ? &raquo;, pas &laquo; Z est informaticien &raquo; ou &laquo; Est-vous pr&ecirc;t ? &raquo;.",
+						timing: null
+					}
+				],
+				suggestions: [{
+					text: "D&rsquo;accord, bien s&ucirc;r.",
+					next: (() => {
+						spanish.messages.unshift({
+							text: "Merci beaucoup !",
+							timing: null
+						});
+						return spanish;
+					})()
+				}]
+			}
+		}, {
+			text: "Non (no)",
+			next: spanish
+		}, {
+			text: "Huh?",
+			next: {
+				messages: [{
+					text: "Oh, I was just asking if you speak French. If you don&rsquo;t, don&rsquo;t worry about it.",
+					timing: null
+				}],
+				suggestions: [{
+					text: "Ah, okay.",
+					next: spanish
+				}]
+			}
+		}
+	]
+};
+
 const nameAndPronouns: MessageAndSuggestionItem = {
 	messages: [
 		{
 			text: "Well, these days I go by the name &lsquo;Z&rsquo; (pronounced the American way: <em>Zee</em> &mdash; not the Canaidan/British way: <em>Zed</em>). My pronouns are <a href='https://pronoun.is/they/.../themself'>they/them/themself</a>. Here are some example usages:",
-			timing: null
+			timing: 2000
 		}, {
 			text: "Z themself went to the store today to buy their favoite tea.<br/><br/>They like to go running in cool (but not cold) weather.<br/><br/>Z? Oh yeah, I like them a lot.",
-			timing: 6000
+			timing: null
 		}
 	],
-	suggestions: null
+	suggestions: [
+		{
+			text: "Okay, got it.",
+			next: french
+		}
+	]
 };
+
+
 
 const messageFlow: MessageAndSuggestionList = [
 	{
