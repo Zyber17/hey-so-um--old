@@ -10,13 +10,11 @@ interface SuggestionItem {
 }
 type SuggestionList = SuggestionItem[];
 
-
 interface MessageAndSuggestionItem {
 	messages: MessageList;
 	suggestions: SuggestionList;
 }
 type MessageAndSuggestionList = MessageAndSuggestionItem[];
-
 
 interface StyleFunction {
 	(elem: any): void
@@ -27,6 +25,7 @@ interface Listener{
 interface Continuation {
 	(): any;
 }
+
 
 const nameMessage: MessageItem = ((hash) => {
 	if (hash.toLowerCase() == 'z') {
@@ -141,8 +140,6 @@ const nameAndPronouns: MessageAndSuggestionItem = {
 	]
 };
 
-
-
 const messageFlow: MessageAndSuggestionList = [
 	{
 		messages: [
@@ -216,11 +213,14 @@ const messageFlow: MessageAndSuggestionList = [
 	}
 ];
 
-const delay = 800;
+
+const delay = 800; //800
+var messages: HTMLElement;
 var messageLog: HTMLElement;
 var currentSuggestions: HTMLElement;
 
 function chatInit(): void {
+	messages = document.getElementById('messages');
 	messageLog = document.getElementById('messageLog');
 	currentSuggestions = document.getElementById('currentSuggestions');
 	displayMessages(messageFlow[0].messages, () => {
@@ -230,8 +230,12 @@ function chatInit(): void {
 
 function displayMessages(messageList: MessageList, continuation: Continuation | null) {
 	if (messageList && messageList.length > 0) {
-		messageLog.appendChild(liConstructor(messageList[0].text, ['me', 'new'], null));
+		const li = liConstructor(messageList[0].text, ['me', 'new'], null);
+		messageLog.appendChild(li);
+		scrollDown();
+
 		const timing: number = messageList[0].timing ? messageList[0].timing : delay;
+
 		messageList.shift(); // remove first item from message list
 		setTimeout(() => {
 			displayMessages(messageList, continuation);
@@ -243,7 +247,9 @@ function displayMessages(messageList: MessageList, continuation: Continuation | 
 }
 
 function displayResponse(response: string) {
-	messageLog.appendChild(liConstructor(response, ['you', 'new'], null));
+	const li = liConstructor(response, ['you', 'new'], null);
+	messageLog.appendChild(li);
+	scrollDown();
 }
 
 function displaySuggestions(suggestionList: SuggestionList) {
@@ -299,4 +305,21 @@ function removeChildren(elem: HTMLElement): void {
 	while (elem.children.length > 0) {
 		elem.children[0].remove();
 	}
+}
+
+function scrollDown() {
+	//li.scrollIntoView({behavior: "smooth", block: "end"}); if bowser suppoer was better…
+
+	const acc = 25; // acceleration constant, how much faster should the scolling happen compared to the fade
+	const scollIncrement = acc*(messages.scrollHeight - messages.scrollTop - messages.clientHeight)/(delay);
+	console.log(scollIncrement);
+
+	function scrollHelper() {
+		if(messages.scrollTop < (messages.scrollHeight - messages.clientHeight)) {
+			messages.scrollTop = Math.ceil(messages.scrollTop + scollIncrement);
+			console.log(messages.scrollTop);
+			setTimeout(() => { scrollHelper(); }, 1);
+		}
+	}
+	scrollHelper();
 }
