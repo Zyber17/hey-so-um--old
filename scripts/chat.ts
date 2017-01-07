@@ -312,14 +312,14 @@ function scrollDown() {
 
 	const acc = 25; // acceleration constant, how much faster should the scolling happen compared to the fade
 	const scollIncrement = acc*(messages.scrollHeight - messages.scrollTop - messages.clientHeight)/(delay);
-	console.log(scollIncrement);
 
-	function scrollHelper() {
+	function scrollHelper(trueVal: number) {
 		if(messages.scrollTop < (messages.scrollHeight - messages.clientHeight)) {
-			messages.scrollTop = Math.ceil(messages.scrollTop + scollIncrement);
+			trueVal += scollIncrement;
+			messages.scrollTop = Math.ceil(trueVal);
 			console.log(messages.scrollTop);
-			setTimeout(() => { scrollHelper(); }, 1);
+			setTimeout(() => { scrollHelper(trueVal); }, 1);
 		}
 	}
-	scrollHelper();
+	scrollHelper(messages.scrollTop);
 }
