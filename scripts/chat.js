@@ -12,6 +12,20 @@ var nameMessage = (function (hash) {
         };
     }
 })(window.location.hash.substr(1));
+var postLanguage = {
+    messages: [
+        {
+            text: "Any questions?",
+            timing: null
+        }
+    ],
+    suggestions: [
+        {
+            text: "Nah",
+            next: null
+        }
+    ]
+};
 var spanish = {
     messages: [{
             text: "&iquest;Habla usted espa&ntilde;ol?",
@@ -20,7 +34,30 @@ var spanish = {
     suggestions: [
         {
             text: "&iexcl;S&iacute;!",
-            next: null
+            next: {
+                messages: [
+                    {
+                        text: "Preferir&iacute;a que usara la gram&aacute;tica femenina cuando hable sobre m&iacute;.",
+                        timing: null
+                    },
+                    {
+                        text: "Por ejemplo, diga &laquo;Z es programadora&raquo; y &laquo;&iquest;Est&aacute; lista?&raquo;, no &laquo;Z es programador&raquo; ni &laquo;&iquest;Est&aacute; listo?&raquo;.",
+                        timing: null
+                    }
+                ],
+                suggestions: [
+                    {
+                        text: "S&iacute;, por supuesto",
+                        next: (function () {
+                            postLanguage.messages.unshift({
+                                text: "&iexcl;Muchas gracias!",
+                                timing: null
+                            });
+                            return postLanguage;
+                        })()
+                    }
+                ]
+            }
         }, {
             text: "No",
             next: null
@@ -58,7 +95,7 @@ var french = {
                         text: "Je l&rsquo;aimerais si vous pouvez utilizer du grammaire f&eacute;minin quand vous parlez de moi.",
                         timing: null
                     }, {
-                        text: "Par exemple, dire &laquo;&nbsp;Z est informaticienne&nbsp;&raquo; et &laquo;&nbsp;Est-vous pr&ecirc;te&nbsp;?&nbsp;&raquo;, pas &laquo;&nbsp;Z est informaticien&nbsp;&raquo; ou &laquo; Est-vous pr&ecirc;t&nbsp;?&nbsp;&raquo;.",
+                        text: "Par exemple, dire &laquo;&nbsp;Z est informaticienne&nbsp;&raquo; et &laquo;&nbsp;Est-vous pr&ecirc;te&nbsp;?&nbsp;&raquo;, pas &laquo;&nbsp;Z est informaticien&nbsp;&raquo; ni &laquo; Est-vous pr&ecirc;t&nbsp;?&nbsp;&raquo;.",
                         timing: null
                     }
                 ],
@@ -180,7 +217,7 @@ var messageFlow = [
         ]
     }
 ];
-var delay = 800;
+var delay = 800; //800
 var messages;
 var messageLog;
 var currentSuggestions;
@@ -198,7 +235,7 @@ function displayMessages(messageList, continuation) {
         messageLog.appendChild(li);
         scrollDown();
         var timing = messageList[0].timing ? messageList[0].timing : delay;
-        messageList.shift();
+        messageList.shift(); // remove first item from message list
         setTimeout(function () {
             displayMessages(messageList, continuation);
         }, timing);
@@ -261,7 +298,8 @@ function removeChildren(elem) {
     }
 }
 function scrollDown() {
-    var acc = 25;
+    //li.scrollIntoView({behavior: "smooth", block: "end"}); if bowser suppoer was better…
+    var acc = 25; // acceleration constant, how much faster should the scolling happen compared to the fade
     var scollIncrement = acc * (messages.scrollHeight - messages.scrollTop - messages.clientHeight) / (delay);
     function scrollHelper(trueVal) {
         if (messages.scrollTop < (messages.scrollHeight - messages.clientHeight)) {
