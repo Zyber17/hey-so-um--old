@@ -41,6 +41,21 @@ const nameMessage: MessageItem = ((hash) => {
 	}
 })(window.location.hash.substr(1));
 
+let postLanguage: MessageAndSuggestionItem = { // WIP
+	messages: [
+		{
+			text: "Any questions?",
+			timing: null
+		}
+	],
+	suggestions: [
+		{
+			text: "Nah",
+			next: null
+		}
+	]
+};
+
 let spanish: MessageAndSuggestionItem = {
 	messages: [{
 		text: "&iquest;Habla usted espa&ntilde;ol?",
@@ -49,7 +64,30 @@ let spanish: MessageAndSuggestionItem = {
 	suggestions: [
 		{
 			text: "&iexcl;S&iacute;!",
-			next: null
+			next: {
+				messages: [
+					{
+						text: "Preferir&iacute;a que usara la gram&aacute;tica femenina cuando hable sobre m&iacute;.",
+						timing: null
+					},
+					{
+						text: "Por ejemplo, diga &laquo;Z es programadora&raquo; y &laquo;&iquest;Est&aacute; lista?&raquo;, no &laquo;Z es programador&raquo; ni &laquo;&iquest;Est&aacute; listo?&raquo;.",
+						timing: null
+					}
+				],
+				suggestions: [
+					{
+						text: "S&iacute;, por supuesto",
+						next:  (() => {
+							postLanguage.messages.unshift({
+								text: "&iexcl;Muchas gracias!",
+								timing: null
+							});
+							return postLanguage;
+						})()
+					}
+				]
+			}
 		}, {
 			text: "No",
 			next: null
@@ -88,7 +126,7 @@ const french: MessageAndSuggestionItem = {
 						text: "Je l&rsquo;aimerais si vous pouvez utilizer du grammaire f&eacute;minin quand vous parlez de moi.",
 						timing: null
 					}, {
-						text: "Par exemple, dire &laquo;&nbsp;Z est informaticienne&nbsp;&raquo; et &laquo;&nbsp;Est-vous pr&ecirc;te&nbsp;?&nbsp;&raquo;, pas &laquo;&nbsp;Z est informaticien&nbsp;&raquo; ou &laquo; Est-vous pr&ecirc;t&nbsp;?&nbsp;&raquo;.",
+						text: "Par exemple, dire &laquo;&nbsp;Z est informaticienne&nbsp;&raquo; et &laquo;&nbsp;Est-vous pr&ecirc;te&nbsp;?&nbsp;&raquo;, pas &laquo;&nbsp;Z est informaticien&nbsp;&raquo; ni &laquo; Est-vous pr&ecirc;t&nbsp;?&nbsp;&raquo;.",
 						timing: null
 					}
 				],
